@@ -33,10 +33,10 @@ const gltfLoader = new GLTFLoader()
 /**          FOG           **/
 
 
-scene.fog = new THREE.Fog(0xA3CBF0, 1, 35)
+scene.fog = new THREE.Fog(0xA3CBF0, 1, 55)
 
 let city;
-gltfLoader.load('/models/lowpoly_city.glb', function(gltf) {
+gltfLoader.load('/models/city.glb', function(gltf) {
 
     city = gltf.scene;
     city.position.set(0, 0, 0)
@@ -89,7 +89,17 @@ const sizes = {
 /**         CAMERA           **/
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 300)
-camera.position.set(-12.247066863003777, 5.216827740281295, -6.637564881096057)
+camera.position.set(8.363739556300711, 8.888755738980052, 15.84417501945494)
+
+gsap.to(camera.position, {
+    x: 8.36349557081933,
+    y: 8.888496437822567,
+    z: 4.175258497858339,
+    delay: 2,
+    duration: 2,
+    ease: "ease.out"
+})
+
 scene.add(camera)
 
 /**         CONTROLS           **/
@@ -98,12 +108,26 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true
 controls.minDistance = 5
-controls.maxDistance = 15
-controls.minPolarAngle = Math.PI / 4;
-controls.maxPolarAngle = Math.PI / 6;
-controls.smoothZoom = 15
-controls.enablePan = true
-console.log(controls)
+controls.maxDistance = 50
+
+controls.mouseButtons = {
+    MIDDLE: THREE.MOUSE.PAN,
+    RIGHT: THREE.MOUSE.PAN,
+    LEFT: THREE.MOUSE.PAN,
+
+}
+controls.addEventListener('change', function() {
+        //...
+        this.target.x = 0;
+        this.target.y = 0;
+        camera.position.x = 8.36349557081933;
+        camera.position.y = 8.888496437822567;
+        controls.minDistance = 0
+        controls.maxDistance = 20
+
+
+    })
+    // console.log(controls)
 controls.update();
 
 
@@ -147,7 +171,7 @@ const tick = () => {
 
     }
 
-
+    console.log(camera.position);
     controls.update()
 
     renderer.render(scene, camera)

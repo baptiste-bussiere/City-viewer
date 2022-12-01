@@ -16,25 +16,31 @@ import * as dat from 'lil-gui'
 
 
 
+
 /**          CANVAS           **/
 const canvas = document.querySelector('canvas.webgl')
 
 
-
 /**          SCENE            **/
 const scene = new THREE.Scene()
-
+scene.background = new THREE.Color(0xA3CBF0)
 
 
 /**          MODELS           **/
 
 const gltfLoader = new GLTFLoader()
 
+/**          FOG           **/
+
+
+scene.fog = new THREE.Fog(0xA3CBF0, 1, 35)
+
 let city;
-gltfLoader.load('/models/toile-3.glb', function(gltf) {
+gltfLoader.load('/models/lowpoly_city.glb', function(gltf) {
 
     city = gltf.scene;
     city.position.set(0, 0, 0)
+    city.scale.set(0.002, 0.002, 0.002)
     scene.add(city)
 
 });
@@ -82,9 +88,23 @@ const sizes = {
 
 /**         CAMERA           **/
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0, 0, 1)
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 300)
+camera.position.set(-12.247066863003777, 5.216827740281295, -6.637564881096057)
 scene.add(camera)
+
+/**         CONTROLS           **/
+
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true
+controls.minDistance = 5
+controls.maxDistance = 15
+controls.minPolarAngle = Math.PI / 4;
+controls.maxPolarAngle = Math.PI / 6;
+controls.smoothZoom = 15
+controls.enablePan = true
+console.log(controls)
+controls.update();
 
 
 
@@ -128,15 +148,7 @@ const tick = () => {
     }
 
 
-
-
-
-
-
-
-
-
-    // controls.update()
+    controls.update()
 
     renderer.render(scene, camera)
     camera.aspect = sizes.width / sizes.height

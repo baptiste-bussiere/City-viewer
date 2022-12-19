@@ -37,6 +37,10 @@ html {
     height: 30px;
     border-radius: 110em;
     border: #fff 2px solid;
+    cursor: pointer;
+    transition: 250ms;
     top: 0;
-    left: 40;
+    &:hover {
+        background-color: #fff;
+    }
 }

@@ -38,20 +38,36 @@ const gltfLoader = new GLTFLoader()
 
 let city;
 let mixer = null;
-gltfLoader.load('/models/house.glb', function(gltf) {
-    city = gltf.scene;
-    scene.add(city)
+// gltfLoader.load('/models/house.glb', function(gltf) {
+//     city = gltf.scene;
+//     scene.add(city)
 
-    const mixer = new THREE.AnimationMixer(city)
-    const action = mixer.clipAction(gltf.animations[0])
-    console.log(action)
-        // action.play()
+//     const mixer = new THREE.AnimationMixer(city)
+//     const action = mixer.clipAction(gltf.animations[0])
+//     console.log(action)
+//         // action.play()
 
-    city.scale.set(0.02, 0.02, 0.02)
-    city.position.set(0, 0, 0)
+//     city.scale.set(0.02, 0.02, 0.02)
+//     city.position.set(0, 0, 0)
 
-});
+// });
 
+gltfLoader.load(
+    '/models/race.glb',
+    (gltf) => {
+        city = gltf.scene;
+        city.scale.set(0.025, 0.025, 0.025)
+        scene.add(city)
+
+        // Animation
+        mixer = new THREE.AnimationMixer(city)
+        const action = mixer.clipAction(gltf.animations[0])
+        action.play()
+        console.log(gltf.scene)
+
+    }
+
+)
 
 /**          CURSOR            **/
 
@@ -72,15 +88,16 @@ window.addEventListener('mousemove', (event) => {
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
 scene.add(ambientLight)
 
-const directionalLight = new THREE.PointLight(0xffffff, 0.6)
-gui.add(directionalLight.position, 'y', 0, 100)
-gui.add(directionalLight.position, 'x', 0, 100)
-gui.add(directionalLight.position, 'z', 0, 100)
-
-
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
+directionalLight.castShadow = true
+directionalLight.shadow.mapSize.set(1024, 1024)
+directionalLight.shadow.camera.far = 15
+directionalLight.shadow.camera.left = -7
+directionalLight.shadow.camera.top = 7
+directionalLight.shadow.camera.right = 7
+directionalLight.shadow.camera.bottom = -7
 directionalLight.position.set(-5, 5, 0)
-
-
+scene.add(directionalLight)
 
 
 
@@ -106,7 +123,7 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 controls.minDistance = 5
-controls.maxDistance = 15
+controls.maxDistance = 25
 
 // window.addEventListener('')
 // controls.mouseButtons = {
@@ -163,7 +180,7 @@ const tick = () => {
 
     }
     if (mixer !== null) {
-        mixer.update(elapsedTime)
+        mixer.update(0.025)
     }
 
 

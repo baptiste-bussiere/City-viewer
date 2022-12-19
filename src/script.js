@@ -133,19 +133,21 @@ controls.minDistance = 10
 controls.maxDistance = 20
 
 
-// controls.mouseButtons = {
-//     MIDDLE: THREE.MOUSE.PAN,
-//     RIGHT: THREE.MOUSE.PAN,
-//     LEFT: THREE.MOUSE.PAN,
+controls.minPolarAngle = Math.PI / 8
+controls.maxPolarAngle = Math.PI / 3
+    // controls.minAzimuthAngle = Math.PI / 4
+    // controls.maxAzimuthAngle = Math.PI / 6
+controls.enablePan = true
 
-// }
-controls.addEventListener('change', function() {
-    this.target.x = 0;
+controls.mouseButtons = {
+    MIDDLE: THREE.MOUSE.LEFT,
+    RIGHT: THREE.MOUSE.LEFT,
+    LEFT: THREE.MOUSE.LEFT,
 
-    this.target.z = 0;
-    camera.position.y = 1
+}
 
-})
+// controls.addEventListener('change', function() {
+// })
 
 
 /**        RENDERER         **/

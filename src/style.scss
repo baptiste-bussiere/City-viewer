@@ -33,8 +33,10 @@ html {
 
 #flow {
     position: absolute;
-    width: 15px;
-    height: 15px;
-    background-color: red;
+    width: 30px;
+    height: 30px;
+    border-radius: 110em;
+    border: #fff 2px solid;
     top: 0;
+    left: 40;
 }

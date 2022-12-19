@@ -34,7 +34,7 @@ const gltfLoader = new GLTFLoader()
 /**          FOG           **/
 
 
-// scene.fog = new THREE.Fog(0xA3CBF0, 1, 25)
+scene.fog = new THREE.Fog(0xA3CBF0, 1, 75)
 
 let city;
 let mixer = null;
@@ -77,11 +77,18 @@ const cursor = {
 }
 
 window.addEventListener('mousemove', (event) => {
-    cursor.x = event.clientX / sizes.width - 0.5,
-        cursor.y = event.clientY / sizes.height - 0.5
-})
+        cursor.x = event.clientX / sizes.width - 0.5,
+            cursor.y = event.clientY / sizes.height - 0.5
+    })
+    /**          PLANE            **/
 
+const planeGeometry = new THREE.PlaneGeometry(200, 200)
+const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xB0FF71 })
 
+const plane = new THREE.Mesh(planeGeometry, planeMaterial)
+plane.rotation.x = -Math.PI / 2
+plane.position.y = 0.60
+scene.add(plane)
 
 /**          LIGHTS            **/
 
@@ -122,22 +129,23 @@ scene.add(camera)
 
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.minDistance = 5
-controls.maxDistance = 25
+controls.minDistance = 10
+controls.maxDistance = 20
 
-// window.addEventListener('')
+
 // controls.mouseButtons = {
-//         MIDDLE: THREE.MOUSE.PAN,
-//         RIGHT: THREE.MOUSE.PAN,
-//         LEFT: THREE.MOUSE.PAN,
+//     MIDDLE: THREE.MOUSE.PAN,
+//     RIGHT: THREE.MOUSE.PAN,
+//     LEFT: THREE.MOUSE.PAN,
 
-//     }
-// controls.addEventListener('change', function() {
-//     this.target.x = 0;
-//     this.target.y = 0;
-//     this.target.z = 0;
+// }
+controls.addEventListener('change', function() {
+    this.target.x = 0;
 
-// })
+    this.target.z = 0;
+    camera.position.y = 1
+
+})
 
 
 /**        RENDERER         **/
@@ -191,7 +199,7 @@ const tick = () => {
     const x = (tempV.x * .5 + .5) * canvas.clientWidth;
     const y = (tempV.y * -.5 + .5) * canvas.clientHeight;
 
-    flow.style.transform = `translate(-25%, -25%) translate(${x}px,${y}px)`
+    flow.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
 
     renderer.render(scene, camera)
     camera.aspect = sizes.width / sizes.height

@@ -37,9 +37,18 @@ const gltfLoader = new GLTFLoader()
 // scene.fog = new THREE.Fog(0xA3CBF0, 1, 25)
 
 let city;
-gltfLoader.load('/models/scene.gltf', function(gltf) {
+let mixer = null;
+gltfLoader.load('/models/house.glb', function(gltf) {
     city = gltf.scene;
     scene.add(city)
+
+    const mixer = new THREE.AnimationMixer(city)
+    const action = mixer.clipAction(gltf.animations[0])
+    console.log(action)
+        // action.play()
+
+    city.scale.set(0.02, 0.02, 0.02)
+    city.position.set(0, 0, 0)
 
 });
 
@@ -63,22 +72,16 @@ window.addEventListener('mousemove', (event) => {
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
 scene.add(ambientLight)
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
+const directionalLight = new THREE.PointLight(0xffffff, 0.6)
 gui.add(directionalLight.position, 'y', 0, 100)
 gui.add(directionalLight.position, 'x', 0, 100)
 gui.add(directionalLight.position, 'z', 0, 100)
 
-directionalLight.shadow.mapSize.set(1024, 1024)
-directionalLight.shadow.camera.far = 15
-directionalLight.shadow.camera.left = -7
-directionalLight.shadow.camera.top = 7
-directionalLight.shadow.camera.right = 7
-directionalLight.shadow.camera.bottom = -7
-directionalLight.position.set(-5, 5, 0)
-scene.add(directionalLight)
 
 directionalLight.position.set(-5, 5, 0)
-scene.add(directionalLight)
+
+
+
 
 
 
@@ -150,19 +153,24 @@ window.addEventListener('resize', () => {
 /**        ANIMATE          **/
 
 const clock = new THREE.Clock()
-
+const previousTime = 0
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - previousTime
 
     if (city) {
 
     }
+    if (mixer !== null) {
+        mixer.update(elapsedTime)
+    }
+
 
     // flow.style.width = elapsedTime * elapsedTime + 'em'
     const tempV = new THREE.Vector3();
     tempV.project(camera)
-    console.log(tempV)
+
     const x = (tempV.x * .5 + .5) * canvas.clientWidth;
     const y = (tempV.y * -.5 + .5) * canvas.clientHeight;
 
